@@ -1,9 +1,10 @@
+import Banner from "../components/shared/home/Banner";
 
 
 export default function Home() {
   return (
     <div>
-      <h2>hellooooo!</h2>
+      <Banner/>
     </div>
   )
 }
