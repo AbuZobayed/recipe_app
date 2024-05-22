@@ -1,16 +1,19 @@
-// import React from 'react'
-
+import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-
-// export default function Navbar() {
-//   return (
-//     <div>
-
-//     </div>
-//   )
-// }
+import auth from "../../firebase/firebase.config";
 
 const Navbar = () => {
+  const [user] = useAuthState(auth);
+  const [signOut] = useSignOut(auth);
+
+  const handleSignOut = async () =>{
+   const signOutSuccess = await signOut()
+
+   if(signOutSuccess){
+    alert('Logout SuccessFully');
+   }
+  }
+
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -62,22 +65,46 @@ const Navbar = () => {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-        <li>
-              <Link to={"/"}>Home</Link>
-            </li>
+          <li>
+            <Link to={"/"}>Home</Link>
+          </li>
 
-            <li>
-              <Link to={"/about"}>About</Link>
-            </li>
+          <li>
+            <Link to={"/about"}>About</Link>
+          </li>
 
-            <li>
-              <Link to={"/contact"}>Contact</Link>
-            </li>
+          <li>
+            <Link to={"/contact"}>Contact</Link>
+          </li>
         </ul>
       </div>
       <div className="navbar-end">
-        <Link to={"/login"} className="btn mr-2">Login</Link>
-        <Link to ={"/register"} className="btn">Register</Link>
+        {!user?.email ? (
+          <>
+            <Link to={"/login"} className="btn mr-2">
+              Login
+            </Link>
+            <Link to={"/register"} className="btn">
+              Register
+            </Link>
+          </>
+        ) : (
+          <div className="flex gap-4 items-center">
+            <Link to={"/dashboard"} className="">
+              Dashboard
+            </Link>
+
+            <button onClick={handleSignOut} className="btn">LogOut</button>
+
+            <div>
+              <div className="avatar placeholder">
+                <div className="bg-neutral text-neutral-content rounded-full w-8">
+                  <span className="text-xs">UI</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

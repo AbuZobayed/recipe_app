@@ -6,6 +6,8 @@ import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import DashboardLayout from "../layouts/DashboardLayout";
+import PrivateRoutes from "./PrivateRoutes";
+// import PrivateRoutes from "./PrivateRoutes";
 
 const router = createBrowserRouter([
   {
@@ -36,7 +38,11 @@ const router = createBrowserRouter([
   },
   {
     path:"/dashboard",
-    element: <DashboardLayout/>
+    element: (
+      <PrivateRoutes>
+        <DashboardLayout/>
+      </PrivateRoutes>
+    )
   }
   
 ]);

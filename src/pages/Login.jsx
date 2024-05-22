@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import GoogleLogin from "../components/shared/auth/GoogleLogin";
+
 export default function Login() {
   return (
     <div className="hero min-h-screen bg-base-200">
@@ -42,7 +45,13 @@ export default function Login() {
             <div className="form-control mt-6">
               <button className="btn btn-primary">Login</button>
             </div>
+            <div>
+                <p> Don&apos;t have any account? <Link to={'/register'} className="text-red-500">Register</Link> </p>
+              </div>
           </form>
+          <div className="mx-7 mb-5">
+          <GoogleLogin/>
+            </div> 
         </div>
       </div>
     </div>

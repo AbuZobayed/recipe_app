@@ -15,7 +15,7 @@ export default {
     extend: {},
   },
   daisyui: {
-    themes: ['dark','light', 'cupcake'],
+    themes: ['light', 'cupcake'],
   },
   // eslint-disable-next-line no-undef
   plugins: [require('daisyui')],

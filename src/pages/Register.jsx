@@ -1,4 +1,5 @@
-
+import { Link } from "react-router-dom";
+import GoogleLogin from "../components/shared/auth/GoogleLogin";
 
 export default function Register() {
   return (
@@ -45,7 +46,13 @@ export default function Register() {
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Register</button>
               </div>
+              <div>
+                <p>Already have an account? <Link to={'/login'} className="text-red-500">Login</Link> </p>
+              </div>
             </form>
+            <div className="mx-7 mb-5">
+              <GoogleLogin />
+            </div>
           </div>
         </div>
       </div>
