@@ -1,7 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleLogin from "../components/shared/auth/GoogleLogin";
+import auth from "../firebase/firebase.config";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useEffect } from "react";
+
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [user] = useAuthState(auth);
+
+  useEffect(()=>{
+    if(user){
+      navigate('/');
+    }
+  },[navigate,user])
+
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col lg:flex-row-reverse">

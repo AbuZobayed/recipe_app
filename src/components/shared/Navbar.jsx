@@ -7,11 +7,11 @@ const Navbar = () => {
   const [signOut] = useSignOut(auth);
 
   const handleSignOut = async () =>{
-   const signOutSuccess = await signOut()
+   await signOut()
 
-   if(signOutSuccess){
-    alert('Logout SuccessFully');
-   }
+  //  if(signOutSuccess){
+  //   alert('Logout SuccessFully');
+  //  }
   }
 
   return (
