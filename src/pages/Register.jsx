@@ -1,19 +1,40 @@
 import { Link, useNavigate } from "react-router-dom";
 import GoogleLogin from "../components/shared/auth/GoogleLogin";
-import { useAuthState } from "react-firebase-hooks/auth";
+import {
+  useAuthState,
+  useCreateUserWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import auth from "../firebase/firebase.config";
 import { useEffect } from "react";
 
 export default function Register() {
-
   const navigate = useNavigate();
-  const [user] = useAuthState(auth);
+  const [userInfo] = useAuthState(auth);
 
-  useEffect(()=>{
-    if(user){
-      navigate('/');
+  // createUserWithEmailAndPassword
+  const [createUserWithEmailAndPassword,user,loading,error] = useCreateUserWithEmailAndPassword(auth);
+
+  console.log(user,loading);
+
+  const handleSignUpWithEmailPassword = (e) =>{
+    e.preventDefault()
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    createUserWithEmailAndPassword(email,password);
+  }
+ 
+
+  // useNavigate
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
     }
-  },[navigate,user])
+    if(error){
+      console.log(error?.message);
+    }
+  }, [navigate, userInfo,error]);
   return (
     <div>
       <div className="hero min-h-screen bg-base-200">
@@ -27,13 +48,14 @@ export default function Register() {
             </p>
           </div>
           <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-            <form className="card-body">
+            <form onSubmit={handleSignUpWithEmailPassword} className="card-body">
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
                 </label>
                 <input
                   type="email"
+                  name="email"
                   placeholder="email"
                   className="input input-bordered"
                   required
@@ -45,6 +67,7 @@ export default function Register() {
                 </label>
                 <input
                   type="password"
+                  name="password"
                   placeholder="password"
                   className="input input-bordered"
                   required
@@ -56,10 +79,20 @@ export default function Register() {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <button className="btn btn-primary">Register</button>
+                <button  className="btn btn-primary">Register</button>
               </div>
+              {
+              error && <p className="text-red-500">{error?.message}</p>
+            }
+
+
               <div>
-                <p>Already have an account? <Link to={'/login'} className="text-red-500">Login</Link> </p>
+                <p>
+                  Already have an account?{" "}
+                  <Link to={"/login"} className="text-red-500">
+                    Login
+                  </Link>{" "}
+                </p>
               </div>
             </form>
             <div className="mx-7 mb-5">

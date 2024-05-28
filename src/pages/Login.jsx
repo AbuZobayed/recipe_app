@@ -1,19 +1,35 @@
 import { Link, useNavigate } from "react-router-dom";
 import GoogleLogin from "../components/shared/auth/GoogleLogin";
 import auth from "../firebase/firebase.config";
-import { useAuthState } from "react-firebase-hooks/auth";
+import {
+  useAuthState,
+  useSignInWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import { useEffect } from "react";
-
 
 export default function Login() {
   const navigate = useNavigate();
-  const [user] = useAuthState(auth);
+  const [userInfo] = useAuthState(auth);
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
 
-  useEffect(()=>{
-    if(user){
-      navigate('/');
+  const handleSignIn = (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    signInWithEmailAndPassword(email, password, error);
+  };
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
     }
-  },[navigate,user])
+  }, [navigate, userInfo]);
+
+  console.log(user, loading);
 
   return (
     <div className="hero min-h-screen bg-base-200">
@@ -27,13 +43,14 @@ export default function Login() {
           </p>
         </div>
         <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-          <form className="card-body">
+          <form onSubmit={handleSignIn} className="card-body">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
               </label>
               <input
                 type="email"
+                name="email"
                 placeholder="email"
                 className="input input-bordered"
                 required
@@ -45,6 +62,7 @@ export default function Login() {
               </label>
               <input
                 type="password"
+                name="password"
                 placeholder="password"
                 className="input input-bordered"
                 required
@@ -58,13 +76,22 @@ export default function Login() {
             <div className="form-control mt-6">
               <button className="btn btn-primary">Login</button>
             </div>
+            {
+              error && <p className="text-red-500">{error?.message}</p>
+            }
             <div>
-                <p> Don&apos;t have any account? <Link to={'/register'} className="text-red-500">Register</Link> </p>
-              </div>
+              <p>
+                {" "}
+                Don&apos;t have any account?{" "}
+                <Link to={"/register"} className="text-red-500">
+                  Register
+                </Link>{" "}
+              </p>
+            </div>
           </form>
           <div className="mx-7 mb-5">
-          <GoogleLogin/>
-            </div> 
+            <GoogleLogin />
+          </div>
         </div>
       </div>
     </div>
